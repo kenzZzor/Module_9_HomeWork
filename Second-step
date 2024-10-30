@@ -1,0 +1,78 @@
+public interface IPaymentProcessor
+{
+    void ProcessPayment(double amount);
+}
+
+public class PayPalPaymentProcessor : IPaymentProcessor
+{
+    public void ProcessPayment(double amount)
+    {
+        Console.WriteLine($"Processing PayPal payment of {amount} dollars.");
+    }
+}
+
+public class StripePaymentService
+{
+    public void MakeTransaction(double totalAmount)
+    {
+        Console.WriteLine($"Processing Stripe transaction of {totalAmount} dollars.");
+    }
+}
+
+public class StripePaymentAdapter : IPaymentProcessor
+{
+    private StripePaymentService stripePaymentService;
+
+    public StripePaymentAdapter(StripePaymentService stripePaymentService)
+    {
+        this.stripePaymentService = stripePaymentService;
+    }
+
+    public void ProcessPayment(double amount)
+    {
+        stripePaymentService.MakeTransaction(amount);
+    }
+}
+
+// Сторонний сервис Square
+public class SquarePaymentService
+{
+    public void PerformPayment(double totalAmount)
+    {
+        Console.WriteLine($"Processing Square payment of {totalAmount} dollars.");
+    }
+}
+
+public class SquarePaymentAdapter : IPaymentProcessor
+{
+    private SquarePaymentService squarePaymentService;
+
+    public SquarePaymentAdapter(SquarePaymentService squarePaymentService)
+    {
+        this.squarePaymentService = squarePaymentService;
+    }
+
+    public void ProcessPayment(double amount)
+    {
+        squarePaymentService.PerformPayment(amount);
+    }
+}
+
+public class Program
+{
+    static void Main(string[] args)
+    {
+        // Используем PayPal
+        IPaymentProcessor paypalProcessor = new PayPalPaymentProcessor();
+        paypalProcessor.ProcessPayment(100);
+
+        // Используем Stripe через адаптер
+        IPaymentProcessor stripeProcessor = new StripePaymentAdapter(new StripePaymentService());
+        stripeProcessor.ProcessPayment(200);
+
+        // Используем Square через адаптер
+        IPaymentProcessor squareProcessor = new SquarePaymentAdapter(new SquarePaymentService());
+        squareProcessor.ProcessPayment(300);
+    }
+}
+
