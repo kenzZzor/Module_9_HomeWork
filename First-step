@@ -1,0 +1,118 @@
+public interface Beverage
+{
+    string GetDescription();
+    double Cost();
+}
+
+public class Espresso : Beverage
+{
+    public string GetDescription() => "Espresso";
+    public double Cost() => 1.99;
+}
+
+public class Tea : Beverage
+{
+    public string GetDescription() => "Tea";
+    public double Cost() => 1.50;
+}
+
+public class Latte : Beverage
+{
+    public string GetDescription() => "Latte";
+    public double Cost() => 3.50;
+}
+
+public class Mocha : Beverage
+{
+    public string GetDescription() => "Mocha";
+    public double Cost() => 3.00;
+}
+
+public abstract class BeverageDecorator : Beverage
+{
+    protected Beverage beverage;
+
+    public BeverageDecorator(Beverage beverage)
+    {
+        this.beverage = beverage;
+    }
+
+    public virtual string GetDescription() => beverage.GetDescription();
+    public virtual double Cost() => beverage.Cost();
+}
+public class Milk : BeverageDecorator
+{
+    public Milk(Beverage beverage) : base(beverage) { }
+
+    public override string GetDescription() => beverage.GetDescription() + ", Milk";
+    public override double Cost() => beverage.Cost() + 0.50;
+}
+
+public class Sugar : BeverageDecorator
+{
+    public Sugar(Beverage beverage) : base(beverage) { }
+
+    public override string GetDescription() => beverage.GetDescription() + ", Sugar";
+    public override double Cost() => beverage.Cost() + 0.20;
+}
+
+public class WhippedCream : BeverageDecorator
+{
+    public WhippedCream(Beverage beverage) : base(beverage) { }
+
+    public override string GetDescription() => beverage.GetDescription() + ", Whipped Cream";
+    public override double Cost() => beverage.Cost() + 0.70;
+}
+
+// Новые добавки
+public class Caramel : BeverageDecorator
+{
+    public Caramel(Beverage beverage) : base(beverage) { }
+
+    public override string GetDescription() => beverage.GetDescription() + ", Caramel";
+    public override double Cost() => beverage.Cost() + 0.60;
+}
+
+public class Chocolate : BeverageDecorator
+{
+    public Chocolate(Beverage beverage) : base(beverage) { }
+
+    public override string GetDescription() => beverage.GetDescription() + ", Chocolate";
+    public override double Cost() => beverage.Cost() + 0.80;
+}
+
+public class Vanilla : BeverageDecorator
+{
+    public Vanilla(Beverage beverage) : base(beverage) { }
+
+    public override string GetDescription() => beverage.GetDescription() + ", Vanilla";
+    public override double Cost() => beverage.Cost() + 0.40;
+}
+
+public class Program
+{
+    static void Main(string[] args)
+    {
+       
+        Beverage beverage = new Latte();
+        Console.WriteLine(beverage.GetDescription() + " $" + beverage.Cost());
+
+        beverage = new Milk(beverage);
+        Console.WriteLine(beverage.GetDescription() + " $" + beverage.Cost());
+
+        beverage = new Caramel(beverage);
+        Console.WriteLine(beverage.GetDescription() + " $" + beverage.Cost());
+
+        beverage = new WhippedCream(beverage);
+        Console.WriteLine(beverage.GetDescription() + " $" + beverage.Cost());
+
+        Beverage mocha = new Mocha();
+        Console.WriteLine(mocha.GetDescription() + " $" + mocha.Cost());
+
+        mocha = new Chocolate(mocha);
+        Console.WriteLine(mocha.GetDescription() + " $" + mocha.Cost());
+
+        mocha = new Vanilla(mocha);
+        Console.WriteLine(mocha.GetDescription() + " $" + mocha.Cost());
+    }
+}
